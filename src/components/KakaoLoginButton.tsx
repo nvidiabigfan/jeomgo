@@ -5,11 +5,11 @@ import { createClient } from '@/lib/supabase'
 export default function KakaoLoginButton() {
   const handleLogin = async () => {
     const supabase = createClient()
+    // NEXT_PUBLIC_APP_URL 대신 window.location.origin 사용 → 배포 환경 자동 감지
+    const redirectTo = `${window.location.origin}/auth/callback?next=/dashboard`
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
-      },
+      options: { redirectTo },
     })
     if (error) {
       console.error('카카오 로그인 오류:', error.message)
@@ -22,7 +22,6 @@ export default function KakaoLoginButton() {
       className="flex items-center justify-center gap-3 w-full max-w-sm px-6 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:opacity-90 active:scale-95"
       style={{ backgroundColor: '#FEE500', color: '#000000' }}
     >
-      {/* 카카오 아이콘 */}
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path
           fillRule="evenodd"
