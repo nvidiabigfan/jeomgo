@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase'
 export default function KakaoLoginButton() {
   const handleLogin = async () => {
     const supabase = createClient()
-    // NEXT_PUBLIC_APP_URL 대신 window.location.origin 사용 → 배포 환경 자동 감지
+    // window.location.origin 사용 → 어느 URL로 접속해도 자동 대응
     const redirectTo = `${window.location.origin}/auth/callback?next=/dashboard`
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'kakao',
