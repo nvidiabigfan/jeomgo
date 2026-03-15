@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get('query') || '맛집';
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
-  const size = searchParams.get('size') || searchParams.get('display') || '15';
+  const size = searchParams.get('size') || '15';
 
   if (!lat || !lng) {
     return NextResponse.json({ error: '위치 정보가 필요합니다.' }, { status: 400 });
