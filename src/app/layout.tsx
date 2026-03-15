@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/icon-192-v2.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512-v2.png", sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/icons/icon-192.png", sizes: "192x192" },
+      { url: "/icons/icon-192-v2.png", sizes: "192x192" },
     ],
   },
 };
@@ -42,7 +42,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="점고" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-192-v2.png" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512.png" />
       </head>
       <body>
