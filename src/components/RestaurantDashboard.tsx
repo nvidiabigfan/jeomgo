@@ -56,7 +56,7 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
         query: category || '점심',
         lat: String(coords.lat),
         lng: String(coords.lng),
-        display: '20',
+        size: '20',
       });
       const res = await fetch(`/api/restaurants?${params}`);
       if (!res.ok) throw new Error('식당 정보를 불러오지 못했습니다.');
