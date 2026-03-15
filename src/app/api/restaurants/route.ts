@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     headers: {
       Authorization: `KakaoAK ${process.env.KAKAO_REST_API_KEY}`,
     },
-    next: { revalidate: 300 }, // 5분 캐시
+    cache: 'no-store', // 캐시 비활성화 (502 캐싱 방지)
   });
 
   if (!res.ok) {
