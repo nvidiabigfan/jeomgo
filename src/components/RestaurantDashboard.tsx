@@ -40,13 +40,14 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [radius, setRadius] = useState(500);
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [recommended, setRecommended] = useState<Restaurant | null>(null);
   const [mapScriptLoaded, setMapScriptLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
 
   // 식당 검색
-  const fetchRestaurants = useCallback(async (category: string) => {
+  const fetchRestaurants = useCallback(async (category: string, r?: number) => {
     if (!coords) return;
     setLoading(true);
     setError(null);
@@ -57,6 +58,7 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
         lat: String(coords.lat),
         lng: String(coords.lng),
         size: '15',
+        radius: String(r ?? radius),
       });
       const res = await fetch(`/api/restaurants?${params}`);
       if (!res.ok) throw new Error('식당 정보를 불러오지 못했습니다.');
@@ -67,7 +69,7 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
     } finally {
       setLoading(false);
     }
-  }, [coords]);
+  }, [coords, radius]);
 
   // 위치 확보 후 자동 검색
   useEffect(() => {
@@ -80,6 +82,12 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
   function handleCategoryChange(value: string) {
     setSelectedCategory(value);
     fetchRestaurants(value);
+  }
+
+  // 반경 변경 시 재검색 (슬라이더 놓을 때)
+  function handleRadiusChange(value: number) {
+    setRadius(value);
+    fetchRestaurants(selectedCategory, value);
   }
 
   // 랜덤 추천
@@ -164,6 +172,43 @@ export default function RestaurantDashboard({ userId, displayName, email }: Prop
                 {opt.label}
               </button>
             ))}
+          </div>
+
+          {/* 반경 슬라이더 */}
+          <div className="bg-white rounded-2xl border border-gray-100 px-4 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-medium text-gray-600">📍 검색 반경</span>
+              <span className="text-xs font-bold text-green-600">
+                {radius >= 1000 ? `${(radius / 1000).toFixed(1)}km` : `${radius}m`}
+              </span>
+            </div>
+            <input
+              type="range"
+              min={100}
+              max={2000}
+              step={100}
+              value={radius}
+              onChange={(e) => setRadius(Number(e.target.value))}
+              onMouseUp={(e) => handleRadiusChange(Number((e.target as HTMLInputElement).value))}
+              onTouchEnd={(e) => handleRadiusChange(Number((e.target as HTMLInputElement).value))}
+              className="w-full h-1.5 rounded-full appearance-none cursor-pointer
+                bg-gradient-to-r from-green-400 to-green-500
+                [&::-webkit-slider-thumb]:appearance-none
+                [&::-webkit-slider-thumb]:w-4
+                [&::-webkit-slider-thumb]:h-4
+                [&::-webkit-slider-thumb]:rounded-full
+                [&::-webkit-slider-thumb]:bg-white
+                [&::-webkit-slider-thumb]:border-2
+                [&::-webkit-slider-thumb]:border-green-500
+                [&::-webkit-slider-thumb]:shadow-md"
+            />
+            <div className="flex justify-between text-[10px] text-gray-300 mt-1">
+              <span>100m</span>
+              <span>500m</span>
+              <span>1km</span>
+              <span>1.5km</span>
+              <span>2km</span>
+            </div>
           </div>
 
           {/* 탭 */}

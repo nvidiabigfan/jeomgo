@@ -6,6 +6,7 @@ export async function GET(request: NextRequest) {
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
   const size = searchParams.get('size') || '15';
+  const radius = searchParams.get('radius') || '500';
 
   if (!lat || !lng) {
     return NextResponse.json({ error: '위치 정보가 필요합니다.' }, { status: 400 });
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
   url.searchParams.set('category_group_code', 'FD6'); // 음식점 카테고리
   url.searchParams.set('x', lng);
   url.searchParams.set('y', lat);
-  url.searchParams.set('radius', '500'); // 500m 반경
+  url.searchParams.set('radius', String(Math.min(Number(radius), 20000))); // 카카오 최대 20000m
   url.searchParams.set('size', size);
   url.searchParams.set('sort', 'distance'); // 가까운 순
 
