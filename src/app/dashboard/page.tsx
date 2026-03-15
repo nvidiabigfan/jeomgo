@@ -1,11 +1,10 @@
-import { createServerClient } from '@/lib/supabase-server';
+import { createServerSupabaseClient } from '@/lib/supabase-server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import RestaurantDashboard from '@/components/RestaurantDashboard';
 
 export default async function DashboardPage() {
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
+  const supabase = await createServerSupabaseClient();
 
   const {
     data: { session },
